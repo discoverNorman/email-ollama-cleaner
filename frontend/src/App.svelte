@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
+  import TitleBar from './lib/TitleBar.svelte';
   import {
     getHealth,
     getStats,
@@ -1070,7 +1071,10 @@ ${JSON.stringify(result.parsed, null, 2)}`;
   }
 </script>
 
-<div class="min-h-screen relative z-10">
+<!-- Custom Electron Titlebar -->
+<TitleBar />
+
+<div class="min-h-screen relative z-10" style="padding-top: 40px;">
   <!-- EULA Modal -->
   {#if !eulaAccepted}
     <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
