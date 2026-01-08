@@ -1,8 +1,32 @@
-import { sqliteTable, text, integer, real, blob } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, blob, index, uniqueIndex } from 'drizzle-orm/sqlite-core';
+
+// Email Accounts table - stores multiple email accounts
+export const emailAccounts = sqliteTable('email_accounts', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(), // User-friendly name like "Personal Gmail"
+  email: text('email').notNull().unique(), // The actual email address
+  provider: text('provider').notNull(), // gmail, outlook, yahoo, custom
+  imapHost: text('imap_host').notNull(),
+  imapPort: integer('imap_port').notNull(),
+  imapUser: text('imap_user').notNull(),
+  imapPassword: text('imap_password').notNull(), // Encrypted in production
+  isActive: integer('is_active').default(1), // 1 = active, 0 = inactive
+  isDefault: integer('is_default').default(0), // 1 = default account, 0 = not default
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(new Date()),
+  lastSyncedAt: integer('last_synced_at', { mode: 'timestamp' }),
+}, (table) => {
+  return {
+    emailIdx: uniqueIndex('email_accounts_email_idx').on(table.email),
+    activeIdx: index('email_accounts_active_idx').on(table.isActive),
+    defaultIdx: index('email_accounts_default_idx').on(table.isDefault),
+  };
+});
 
 export const emails = sqliteTable('emails', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  messageId: text('message_id').unique().notNull(),
+  accountId: integer('account_id').references(() => emailAccounts.id), // Foreign key to email accounts
+  messageId: text('message_id').notNull(),
   fromAddr: text('from_addr').notNull(),
   subject: text('subject').notNull(),
   bodyPreview: text('body_preview'),
@@ -11,6 +35,14 @@ export const emails = sqliteTable('emails', {
   confidence: real('confidence').default(0),
   processedAt: integer('processed_at', { mode: 'timestamp' }).default(new Date()),
   deleted: integer('deleted').default(0),
+}, (table) => {
+  return {
+    accountIdIdx: index('emails_account_id_idx').on(table.accountId),
+    messageIdIdx: uniqueIndex('emails_message_id_account_idx').on(table.messageId, table.accountId), // Composite unique
+    classificationIdx: index('emails_classification_idx').on(table.classification),
+    dateIdx: index('emails_date_idx').on(table.date),
+    deletedIdx: index('emails_deleted_idx').on(table.deleted),
+  };
 });
 
 export const unsubscribeTasks = sqliteTable('unsubscribe_tasks', {
@@ -26,12 +58,18 @@ export const unsubscribeTasks = sqliteTable('unsubscribe_tasks', {
 
 export const scanLogs = sqliteTable('scan_logs', {
   id: integer('id').primaryKey({ autoIncrement: true }),
+  accountId: integer('account_id').references(() => emailAccounts.id), // Which account was scanned
   startedAt: integer('started_at', { mode: 'timestamp' }).default(new Date()),
   completedAt: integer('completed_at', { mode: 'timestamp' }),
   emailsProcessed: integer('emails_processed').default(0),
   spamCount: integer('spam_count').default(0),
   newsletterCount: integer('newsletter_count').default(0),
   keepCount: integer('keep_count').default(0),
+}, (table) => {
+  return {
+    accountIdIdx: index('scan_logs_account_id_idx').on(table.accountId),
+    startedAtIdx: index('scan_logs_started_at_idx').on(table.startedAt),
+  };
 });
 
 export const settings = sqliteTable('settings', {
@@ -43,6 +81,7 @@ export const settings = sqliteTable('settings', {
 
 export const emailQueue = sqliteTable('email_queue', {
   id: integer('id').primaryKey({ autoIncrement: true }),
+  accountId: integer('account_id').references(() => emailAccounts.id), // Which account this email belongs to
   messageId: text('message_id').notNull(),
   fromAddr: text('from_addr').notNull(),
   subject: text('subject').notNull(),
@@ -56,8 +95,16 @@ export const emailQueue = sqliteTable('email_queue', {
   completedAt: integer('completed_at', { mode: 'timestamp' }),
   result: text('result'), // JSON string with classification result
   error: text('error'),
+}, (table) => {
+  return {
+    accountIdIdx: index('email_queue_account_id_idx').on(table.accountId),
+    statusIdx: index('email_queue_status_idx').on(table.status),
+    workerIdIdx: index('email_queue_worker_id_idx').on(table.workerId),
+  };
 });
 
+export type EmailAccount = typeof emailAccounts.$inferSelect;
+export type NewEmailAccount = typeof emailAccounts.$inferInsert;
 export type Email = typeof emails.$inferSelect;
 export type NewEmail = typeof emails.$inferInsert;
 export type UnsubscribeTask = typeof unsubscribeTasks.$inferSelect;
