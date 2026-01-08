@@ -2,7 +2,7 @@
   "name": "email-ollama-cleaner",
   "version": "1.0.0",
   "type": "module",
-  "main": "electron/main.js",
+  "main": "electron/main.cjs",
   "description": "IMAP email cleaner with Ollama spam detection",
   "author": "norman <info@agentdrivendevelopment.com>",
   "scripts": {

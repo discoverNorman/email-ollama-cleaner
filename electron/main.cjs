@@ -64,20 +64,29 @@ function stopBackend() {
 
 // Window management
 function createWindow() {
-  mainWindow = new BrowserWindow({
+  const fs = require('fs');
+  const iconPath = path.join(__dirname, 'assets', 'icon.png');
+
+  const windowOptions = {
     width: 1400,
     height: 900,
     minWidth: 1000,
     minHeight: 700,
-    icon: path.join(__dirname, 'icon.png'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.cjs')
     },
     title: 'Email Ollama Cleaner',
     autoHideMenuBar: true
-  });
+  };
+
+  // Add icon if it exists
+  if (fs.existsSync(iconPath)) {
+    windowOptions.icon = iconPath;
+  }
+
+  mainWindow = new BrowserWindow(windowOptions);
 
   // Load the frontend
   const frontendUrl = isDev
@@ -107,8 +116,18 @@ function createWindow() {
 
 // System tray
 function createTray() {
-  // Create a simple colored square as tray icon (you can replace with actual icon)
-  tray = new Tray(path.join(__dirname, 'tray-icon.png'));
+  // Check if tray icon exists
+  const fs = require('fs');
+  const trayIconPath = path.join(__dirname, 'assets', 'tray-icon.png');
+
+  if (!fs.existsSync(trayIconPath)) {
+    console.log('[Electron] Tray icon not found, skipping tray creation');
+    console.log('[Electron] Add icons to electron/assets/ directory for tray support');
+    return;
+  }
+
+  try {
+    tray = new Tray(trayIconPath);
 
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -149,6 +168,10 @@ function createTray() {
       }
     }
   });
+  } catch (error) {
+    console.error('[Electron] Failed to create tray:', error);
+    console.log('[Electron] App will continue without system tray');
+  }
 }
 
 // IPC handlers
