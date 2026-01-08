@@ -56,7 +56,32 @@ export interface ScanResult {
   keepCount: number;
 }
 
-const BASE_URL = '/api';
+// Detect if running in Electron and get the appropriate base URL
+async function getBaseUrl(): Promise<string> {
+  // Check if we're in Electron
+  if (typeof window !== 'undefined' && (window as any).electronAPI) {
+    const backendUrl = await (window as any).electronAPI.getBackendUrl();
+    return `${backendUrl}/api`;
+  }
+
+  // In web mode, use relative URL
+  return '/api';
+}
+
+// Initialize base URL (defaults to web mode for immediate usage)
+let BASE_URL = '/api';
+
+// Update BASE_URL if we're in Electron (async initialization)
+if (typeof window !== 'undefined' && (window as any).electronAPI) {
+  getBaseUrl().then(url => {
+    BASE_URL = url;
+  });
+}
+
+// Export a function to check if running in Electron
+export function isElectron(): boolean {
+  return typeof window !== 'undefined' && (window as any).electronAPI !== undefined;
+}
 
 export async function getHealth(): Promise<HealthStatus> {
   const res = await fetch(`${BASE_URL}/health`);

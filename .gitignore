@@ -4,6 +4,7 @@ node_modules/
 # Build outputs
 dist/
 build/
+dist-electron/
 
 # Environment variables
 .env
@@ -30,3 +31,8 @@ Thumbs.db
 # Temporary files
 *.tmp
 .temp/
+
+# Electron
+electron/assets/*.png
+electron/assets/*.ico
+electron/assets/*.icns

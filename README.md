@@ -13,6 +13,7 @@ A privacy-focused email classification tool powered by local AI. Automatically c
 
 - [Features](#features)
 - [Demo](#demo)
+- [Deployment Options](#deployment-options)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Configuration](#configuration)
@@ -71,6 +72,73 @@ A privacy-focused email classification tool powered by local AI. Automatically c
 - Ollama connection status
 - Model configuration
 - System health check
+
+---
+
+## Deployment Options
+
+This application can run in **two modes**:
+
+### 1. Desktop App (Electron) - Recommended for Privacy
+
+**Best for**: Maximum privacy, offline use, local Ollama processing
+
+Run as a native desktop application with:
+- System tray integration
+- Auto-start backend server
+- Local database and AI processing
+- Minimize to tray
+- Native notifications
+
+**Quick Start**:
+```bash
+npm install
+npm run electron:dev  # Development mode
+```
+
+**Build Installers**:
+```bash
+npm run electron:build        # All platforms
+npm run electron:build:win    # Windows (.exe, portable)
+npm run electron:build:mac    # macOS (.dmg)
+npm run electron:build:linux  # Linux (.AppImage, .deb, .rpm)
+```
+
+Installers will be in the `dist-electron/` directory.
+
+### 2. Web App - Easy Access
+
+**Best for**: Quick testing, remote access, shared hosting
+
+Run as a traditional web application:
+- Access from any browser
+- Can use remote Ollama server
+- Deploy to cloud hosting (Vercel, Netlify, VPS)
+- Share with multiple users
+
+**Quick Start**:
+```bash
+npm install
+
+# Terminal 1: Backend
+npm run dev
+
+# Terminal 2: Frontend
+npm run dev:frontend
+```
+
+Navigate to `http://localhost:5173`
+
+### Choosing Your Mode
+
+| Feature | Desktop (Electron) | Web App |
+|---------|-------------------|---------|
+| **Privacy** | Maximum (all local) | Good (can use local Ollama) |
+| **Setup** | One-click install | Manual start |
+| **Access** | Single machine | Any browser |
+| **Updates** | Auto-updater | Manual pull |
+| **System Tray** | Yes | No |
+| **Offline** | Yes (with local Ollama) | No |
 
 ---
 
@@ -425,13 +493,27 @@ email-ollama-cleaner/
 
 ### Available Scripts
 
+#### Web App Development
 ```bash
 npm run dev              # Start backend dev server (hot reload)
 npm run dev:frontend     # Start Svelte dev server (hot reload)
 npm run build            # Build both backend and frontend
-npm run db:generate      # Generate new Drizzle migrations
-npm run db:migrate       # Apply database migrations
 npm run preview          # Preview production build
+```
+
+#### Electron App Development
+```bash
+npm run electron:dev           # Start Electron in development mode
+npm run electron:build         # Build production Electron app (all platforms)
+npm run electron:build:win     # Build for Windows only
+npm run electron:build:mac     # Build for macOS only
+npm run electron:build:linux   # Build for Linux only
+```
+
+#### Database
+```bash
+npm run db:generate      # Generate new Drizzle migrations
+npm run db:migrate       # Run database migrations
 ```
 
 ### Making Code Changes
@@ -496,6 +578,39 @@ npm run db:migrate   # Applies migration
 1. Ensure only one instance of the app is running
 2. Close any SQLite browser tools
 3. Delete `emails.db-shm` and `emails.db-wal` files (if safe)
+
+### Electron App Issues
+
+**Problem**: "App won't start" or blank window
+
+**Solutions**:
+1. Ensure you've built the frontend first: `npm run build`
+2. Check console for errors: Open DevTools with Ctrl+Shift+I (Windows/Linux) or Cmd+Option+I (Mac)
+3. Delete `node_modules` and reinstall: `rm -rf node_modules && npm install`
+4. Check logs in terminal where you ran `npm run electron:dev`
+
+**Problem**: "Backend not connecting" in Electron
+
+**Solutions**:
+1. Check `electron/main.js` console output for backend errors
+2. Verify port 3000 is not already in use: `lsof -i :3000` (Mac/Linux) or `netstat -ano | findstr :3000` (Windows)
+3. Try manually starting backend: `npm run dev` then `electron .`
+
+**Problem**: Missing app icons
+
+**Solutions**:
+1. Add icon files to `electron/assets/` directory
+2. See `electron/assets/README.md` for icon requirements
+3. Temporary: Generate placeholder icons with ImageMagick or online tools
+4. The app will work without icons but may show placeholders
+
+**Problem**: Build fails with "Cannot find module"
+
+**Solutions**:
+1. Ensure `dist/` directory exists: `npm run build`
+2. Check that `electron/main.js` and `electron/preload.js` are present
+3. Verify all dependencies are installed: `npm install`
+4. Try cleaning build cache: `rm -rf dist dist-electron && npm run build`
 
 ---
 

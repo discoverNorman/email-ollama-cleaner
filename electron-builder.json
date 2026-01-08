@@ -1,0 +1,68 @@
+{
+  "appId": "com.agentdrivendevelopment.email-ollama-cleaner",
+  "productName": "Email Ollama Cleaner",
+  "copyright": "Copyright © 2026 norman",
+  "directories": {
+    "output": "dist-electron",
+    "buildResources": "electron/assets"
+  },
+  "files": [
+    "dist/**/*",
+    "electron/main.js",
+    "electron/preload.js",
+    "package.json",
+    "node_modules/**/*",
+    "!node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+    "!node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+    "!node_modules/*.d.ts",
+    "!node_modules/.bin",
+    "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+    "!.editorconfig",
+    "!**/._*",
+    "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+    "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+    "!**/{appveyor.yml,.travis.yml,circle.yml}",
+    "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+    "!src",
+    "!frontend",
+    "!*.config.{js,ts}",
+    "!*.db",
+    "!*.db-*",
+    "!.env",
+    "!.env.*"
+  ],
+  "extraResources": [
+    {
+      "from": ".env.example",
+      "to": ".env.example"
+    }
+  ],
+  "win": {
+    "target": ["nsis", "portable"],
+    "icon": "electron/assets/icon.png",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "Email Ollama Cleaner"
+  },
+  "mac": {
+    "target": ["dmg", "zip"],
+    "icon": "electron/assets/icon.png",
+    "category": "public.app-category.productivity",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+  },
+  "dmg": {
+    "title": "Email Ollama Cleaner",
+    "icon": "electron/assets/icon.png"
+  },
+  "linux": {
+    "target": ["AppImage", "deb", "rpm"],
+    "icon": "electron/assets/icon.png",
+    "category": "Office",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+  }
+}
