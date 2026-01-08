@@ -1,0 +1,1709 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Premium color palette */
+  --color-primary: #6366f1;
+  --color-primary-light: #818cf8;
+  --color-primary-dark: #4f46e5;
+
+  --color-success: #10b981;
+  --color-success-light: #34d399;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fbbf24;
+  --color-danger: #ef4444;
+  --color-danger-light: #f87171;
+
+  /* Glass effect colors */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  /* Gradients - Trash Truck Green Theme (NO PURPLE!) */
+  --gradient-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-danger: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+  --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --gradient-mesh: radial-gradient(at 40% 20%, hsla(228,100%,74%,0.15) 0px, transparent 50%),
+                   radial-gradient(at 80% 0%, hsla(189,100%,56%,0.1) 0px, transparent 50%),
+                   radial-gradient(at 0% 50%, hsla(355,100%,93%,0.1) 0px, transparent 50%),
+                   radial-gradient(at 80% 50%, hsla(340,100%,76%,0.1) 0px, transparent 50%),
+                   radial-gradient(at 0% 100%, hsla(22,100%,77%,0.1) 0px, transparent 50%);
+
+  /* Typography */
+  --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Spacing rhythm */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Animation timings */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+}
+
+/* Base styles */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-mesh);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glass morphism utilities */
+@layer utilities {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Premium button styles */
+@layer components {
+  .btn-primary {
+    @apply relative overflow-hidden px-6 py-3 rounded-2xl font-semibold text-white;
+    background: var(--gradient-primary);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-2xl font-semibold;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 rounded-xl font-medium text-gray-600;
+    transition: all var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--color-success);
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 rounded-xl font-medium text-red-600;
+    transition: all var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .btn-danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+  }
+}
+
+/* Card styles */
+@layer components {
+  .card {
+    @apply rounded-3xl;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06),
+                0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1),
+                0 4px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .card-interactive {
+    @apply card cursor-pointer;
+  }
+
+  .card-interactive:hover {
+    transform: translateY(-4px);
+  }
+
+  .stat-card {
+    @apply relative overflow-hidden rounded-3xl p-6;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    transition: all var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+    opacity: 0.1;
+    transition: all var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .stat-card:hover::before {
+    transform: translate(20%, -20%) scale(1.2);
+    opacity: 0.15;
+  }
+
+  .stat-card.stat-total::before { background: var(--gradient-primary); }
+  .stat-card.stat-spam::before { background: var(--gradient-danger); }
+  .stat-card.stat-newsletter::before { background: var(--gradient-warning); }
+  .stat-card.stat-keep::before { background: var(--gradient-success); }
+}
+
+/* Input styles */
+@layer components {
+  .input-premium {
+    @apply w-full px-4 py-3 rounded-2xl text-gray-900;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
+                inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: all var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .input-premium:hover {
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .input-premium:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--color-success);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1),
+                0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .select-premium {
+    @apply input-premium appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+    padding-right: 3rem;
+  }
+
+  .textarea-premium {
+    @apply input-premium resize-none;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+}
+
+/* Badge styles */
+@layer components {
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    transition: all var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .badge-spam {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.1) 100%);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  .badge-newsletter {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .badge-keep {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .badge-unknown {
+    background: linear-gradient(135deg, rgba(107, 114, 128, 0.15) 0%, rgba(107, 114, 128, 0.1) 100%);
+    color: #4b5563;
+    border: 1px solid rgba(107, 114, 128, 0.2);
+  }
+}
+
+/* Animation keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes slide-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes bounce-in {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes count-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-float { animation: float 3s ease-in-out infinite; }
+  .animate-slide-up { animation: slide-up 0.5s var(--ease-out-expo) forwards; }
+  .animate-slide-in-right { animation: slide-in-right 0.5s var(--ease-out-expo) forwards; }
+  .animate-scale-in { animation: scale-in 0.3s var(--ease-out-expo) forwards; }
+  .animate-fade-in { animation: fade-in 0.3s ease forwards; }
+  .animate-bounce-in { animation: bounce-in 0.6s var(--ease-out-back) forwards; }
+
+  .stagger-1 { animation-delay: 50ms; }
+  .stagger-2 { animation-delay: 100ms; }
+  .stagger-3 { animation-delay: 150ms; }
+  .stagger-4 { animation-delay: 200ms; }
+  .stagger-5 { animation-delay: 250ms; }
+}
+
+/* Status indicator */
+.status-indicator {
+  @apply relative;
+}
+
+.status-indicator::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.status-indicator.connected::before {
+  background: rgba(16, 185, 129, 0.4);
+}
+
+.status-indicator.disconnected::before {
+  background: rgba(239, 68, 68, 0.4);
+}
+
+/* Skeleton loader */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* Toast styles */
+.toast-container {
+  @apply fixed bottom-6 right-6 z-50 flex flex-col gap-3;
+}
+
+.toast {
+  @apply flex items-center gap-3 px-5 py-4 rounded-2xl shadow-2xl;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slide-in-right 0.4s var(--ease-out-expo) forwards;
+  max-width: 400px;
+}
+
+.toast-success {
+  border-left: 4px solid var(--color-success);
+}
+
+.toast-error {
+  border-left: 4px solid var(--color-danger);
+}
+
+.toast-info {
+  border-left: 4px solid var(--color-success);
+}
+
+/* Tab indicator animation */
+.tab-indicator {
+  @apply absolute bottom-0 h-0.5 rounded-full;
+  background: var(--gradient-primary);
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+/* Table styles */
+.table-premium {
+  @apply w-full;
+}
+
+.table-premium thead {
+  @apply sticky top-0;
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.table-premium th {
+  @apply px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider;
+}
+
+.table-premium tbody tr {
+  @apply border-b border-gray-100;
+  transition: all var(--duration-fast) ease;
+}
+
+.table-premium tbody tr:hover {
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.table-premium td {
+  @apply px-6 py-4;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Progress bar */
+.progress-bar {
+  @apply h-2 rounded-full overflow-hidden;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.progress-bar-fill {
+  @apply h-full rounded-full;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  transition: width var(--duration-slow) var(--ease-out-expo);
+}
+
+/* Connection status card */
+.connection-card {
+  @apply rounded-2xl p-4 border;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.connection-card.connected {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.connection-card.disconnected {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 100%);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Code block */
+.code-block {
+  @apply rounded-2xl p-4 font-mono text-sm overflow-auto;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.code-block.success {
+  color: #6ee7b7;
+}
+
+.code-block.error {
+  color: #fca5a5;
+}
+
+/* Model card */
+.model-card {
+  @apply flex items-center justify-between p-4 rounded-2xl border;
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.06);
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.model-card:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transform: translateX(4px);
+}
+
+.model-card.active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Worker status */
+.worker-dot {
+  @apply w-2 h-2 rounded-full;
+  transition: all var(--duration-fast) ease;
+}
+
+.worker-dot.running {
+  background: var(--color-success);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.worker-dot.idle {
+  background: #9ca3af;
+}
+
+/* Trash Truck Animations */
+@keyframes bounce-truck {
+  0%, 100% { transform: translateY(0); }
+  15% { transform: translateY(-3px); }
+  30% { transform: translateY(0); }
+  45% { transform: translateY(-2px); }
+  60% { transform: translateY(0); }
+}
+
+@keyframes spin-wheel {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes email-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-3px) rotate(-2deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-2px) rotate(2deg); }
+}
+
+@keyframes puff-1 {
+  0% { opacity: 0.6; transform: scale(1) translate(0, 0); }
+  100% { opacity: 0; transform: scale(1.5) translate(-8px, -8px); }
+}
+
+@keyframes puff-2 {
+  0% { opacity: 0.4; transform: scale(1) translate(0, 0); }
+  100% { opacity: 0; transform: scale(1.3) translate(-10px, -10px); }
+}
+
+@keyframes puff-3 {
+  0% { opacity: 0.3; transform: scale(1) translate(0, 0); }
+  100% { opacity: 0; transform: scale(1.2) translate(-6px, -12px); }
+}
+
+.animate-bounce-truck {
+  animation: bounce-truck 0.8s ease-in-out infinite;
+}
+
+.animate-spin-wheel {
+  animation: spin-wheel 0.5s linear infinite;
+}
+
+.animate-email-bounce {
+  animation: email-bounce 0.8s ease-in-out infinite;
+}
+
+.animate-puff-1 {
+  animation: puff-1 1.5s ease-out infinite;
+}
+
+.animate-puff-2 {
+  animation: puff-2 1.5s ease-out infinite 0.2s;
+}
+
+.animate-puff-3 {
+  animation: puff-3 1.5s ease-out infinite 0.4s;
+}
+
+/* Trash button hover effect */
+.btn-trash {
+  @apply p-2 rounded-xl text-gray-400;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+}
+
+.btn-trash:hover {
+  @apply text-red-500 bg-red-50;
+  transform: scale(1.1);
+}
+
+.btn-trash:active {
+  transform: scale(0.95);
+}
+
+.btn-trash:disabled {
+  @apply opacity-30 cursor-not-allowed;
+  transform: none;
+}
+
+/* ===== PREMIUM APPLE-STYLE LOADING ANIMATIONS ===== */
+
+/* Truck drives smoothly across screen */
+@keyframes truck-cruise {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(calc(100vw + 100%));
+  }
+}
+
+/* Truck body has gentle suspension bounce */
+@keyframes truck-suspension {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  20% { transform: translateY(-2px) rotate(-0.3deg); }
+  40% { transform: translateY(1px) rotate(0.2deg); }
+  60% { transform: translateY(-1.5px) rotate(-0.2deg); }
+  80% { transform: translateY(0.5px) rotate(0.1deg); }
+}
+
+/* Wheels spin realistically */
+@keyframes wheel-roll {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Email floats up and into truck */
+@keyframes email-collect {
+  0% {
+    transform: translateY(60px) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: translateY(-20px) rotate(-15deg) scale(0.9);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-40px) translateX(10px) rotate(-5deg) scale(0.7);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-30px) translateX(20px) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Email waiting to be collected - gentle float */
+@keyframes email-wait {
+  0%, 100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+/* Exhaust puffs with realistic physics */
+@keyframes exhaust-puff {
+  0% {
+    transform: scale(0.3) translateX(0);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.5) translateX(-40px) translateY(-20px);
+    opacity: 0;
+  }
+}
+
+/* Road dashes moving */
+@keyframes road-move {
+  from { transform: translateX(0); }
+  to { transform: translateX(-48px); }
+}
+
+/* Sparkle effect */
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+/* Success confetti burst */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Gentle breathing glow */
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.6));
+  }
+}
+
+/* Progress truck drives along bar */
+@keyframes progress-truck {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--progress-width, 0)); }
+}
+
+/* Smoke ring effect */
+@keyframes smoke-ring {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.6;
+    border-width: 3px;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+/* Apple-style spring bounce */
+@keyframes spring-up {
+  0% {
+    transform: translateY(40px) scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(-8px) scale(1.02);
+  }
+  80% {
+    transform: translateY(3px) scale(0.99);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Number counter animation */
+@keyframes count-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Loading dots sequence */
+@keyframes loading-dot {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Dust particles behind truck */
+@keyframes dust-particle {
+  0% {
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(-60px) translateY(-15px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Utility classes for premium animations */
+.animate-truck-cruise {
+  animation: truck-cruise 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-truck-suspension {
+  animation: truck-suspension 0.8s ease-in-out infinite;
+}
+
+.animate-wheel-roll {
+  animation: wheel-roll 0.4s linear infinite;
+}
+
+.animate-email-collect {
+  animation: email-collect 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-email-wait {
+  animation: email-wait 2s ease-in-out infinite;
+}
+
+.animate-exhaust {
+  animation: exhaust-puff 1.2s ease-out infinite;
+}
+
+.animate-road {
+  animation: road-move 0.3s linear infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-spring-up {
+  animation: spring-up 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-count-pop {
+  animation: count-pop 0.3s ease-out;
+}
+
+.animate-dust {
+  animation: dust-particle 0.6s ease-out forwards;
+}
+
+/* Staggered loading dots */
+.loading-dot-1 { animation: loading-dot 1.4s ease-in-out infinite; }
+.loading-dot-2 { animation: loading-dot 1.4s ease-in-out 0.2s infinite; }
+.loading-dot-3 { animation: loading-dot 1.4s ease-in-out 0.4s infinite; }
+
+/* Premium loading screen background */
+.loading-bg {
+  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 50%, #d1fae5 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(180deg,
+    rgba(134, 239, 172, 0.1) 0%,
+    transparent 100%
+  );
+}
+
+/* Road styling */
+.road {
+  background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+  position: relative;
+}
+
+.road::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    #fbbf24 0px,
+    #fbbf24 20px,
+    transparent 20px,
+    transparent 40px
+  );
+  transform: translateY(-50%);
+}
+
+/* Grass texture */
+.grass {
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  position: relative;
+}
+
+.grass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.1) 0px,
+    rgba(255,255,255,0.1) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+}
+
+/* ===== 2028 FUTURISTIC DESIGN SYSTEM ===== */
+
+/* Modern pill navigation */
+.nav-pills {
+  display: inline-flex;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 16px;
+  gap: 4px;
+}
+
+.nav-pill {
+  position: relative;
+  padding: 12px 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-pill:hover {
+  color: #334155;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.nav-pill.active {
+  color: #059669;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.nav-pill .icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.nav-pill.active .icon {
+  opacity: 1;
+}
+
+/* Floating stat cards - 2028 style */
+.stat-card-2028 {
+  position: relative;
+  padding: 28px;
+  border-radius: 24px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.stat-card-2028::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+  opacity: 0.08;
+  transition: all 0.5s ease;
+}
+
+.stat-card-2028:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border-color: transparent;
+}
+
+.stat-card-2028:hover::before {
+  transform: translate(20%, -20%) scale(1.3);
+  opacity: 0.12;
+}
+
+.stat-card-2028.total::before { background: linear-gradient(135deg, #10b981, #059669); }
+.stat-card-2028.spam::before { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.stat-card-2028.newsletter::before { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.stat-card-2028.keep::before { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+.stat-value {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card-2028.spam .stat-value {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.stat-card-2028.newsletter .stat-value {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.stat-card-2028.keep .stat-value {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Modern chart card */
+.chart-card-2028 {
+  background: white;
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s ease;
+}
+
+.chart-card-2028:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+/* Content panel */
+.content-panel {
+  background: white;
+  border-radius: 28px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+}
+
+/* Action bar */
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 28px;
+  background: linear-gradient(180deg, rgba(249, 250, 251, 0.8) 0%, rgba(249, 250, 251, 0) 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Modern button - 2028 */
+.btn-2028 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-2028-primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-2028-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+}
+
+.btn-2028-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-2028-secondary {
+  background: rgba(0, 0, 0, 0.04);
+  color: #374151;
+}
+
+.btn-2028-secondary:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.btn-2028-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.btn-2028-danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Search input - 2028 */
+.search-2028 {
+  position: relative;
+}
+
+.search-2028 input {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  font-size: 0.875rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.search-2028 input:focus {
+  outline: none;
+  border-color: #10b981;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.search-2028 .icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+}
+
+/* Email row - 2028 */
+.email-row-2028 {
+  display: flex;
+  align-items: center;
+  padding: 16px 28px;
+  gap: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.email-row-2028:hover {
+  background: rgba(16, 185, 129, 0.02);
+}
+
+.email-row-2028:last-child {
+  border-bottom: none;
+}
+
+/* Badge - 2028 */
+.badge-2028 {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge-2028.spam {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.badge-2028.newsletter {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+.badge-2028.keep {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.badge-2028.unknown {
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+}
+
+/* Quick actions grid */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.quick-action-card {
+  padding: 24px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quick-action-card:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%);
+  border-color: rgba(16, 185, 129, 0.2);
+  transform: translateY(-2px);
+}
+
+.quick-action-card.danger {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.02) 100%);
+  border-color: rgba(239, 68, 68, 0.1);
+}
+
+.quick-action-card.danger:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.04) 100%);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Section header */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  color: #d1d5db;
+}
+
+/* Settings group */
+.settings-group {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.settings-group-header {
+  padding: 20px 24px;
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.settings-group-content {
+  padding: 24px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+/* ===== EPIC TRASH TRUCK ANIMATIONS ===== */
+
+/* Fire/flames from exhaust */
+@keyframes flame-flicker {
+  0%, 100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 0.9;
+  }
+  25% {
+    transform: scaleY(1.3) scaleX(0.8);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.9) scaleX(1.1);
+    opacity: 0.8;
+  }
+  75% {
+    transform: scaleY(1.2) scaleX(0.9);
+    opacity: 0.95;
+  }
+}
+
+/* Speed lines streaking behind */
+@keyframes speed-streak {
+  0% {
+    transform: translateX(0) scaleX(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(-80px) scaleX(2);
+    opacity: 0;
+  }
+}
+
+/* Dust cloud billowing */
+@keyframes dust-billow {
+  0% {
+    transform: translateX(0) translateY(0) scale(0.5);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(-50px) translateY(-15px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Wheel sparks */
+@keyframes wheel-spark {
+  0% {
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-30px) translateY(-10px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Epic headlight glow pulse */
+@keyframes headlight-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(253, 230, 138, 0.8));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(253, 230, 138, 1)) drop-shadow(0 0 30px rgba(253, 230, 138, 0.6));
+  }
+}
+
+/* Truck power surge glow */
+@keyframes power-surge {
+  0%, 100% {
+    filter: drop-shadow(0 4px 8px rgba(16, 185, 129, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 6px 20px rgba(16, 185, 129, 0.7)) drop-shadow(0 0 40px rgba(52, 211, 153, 0.3));
+  }
+}
+
+/* Epic suspension with power */
+@keyframes epic-suspension {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  10% { transform: translateY(-3px) rotate(-0.5deg); }
+  25% { transform: translateY(1px) rotate(0.3deg); }
+  40% { transform: translateY(-2px) rotate(-0.3deg); }
+  55% { transform: translateY(0.5px) rotate(0.2deg); }
+  70% { transform: translateY(-1.5px) rotate(-0.2deg); }
+  85% { transform: translateY(1px) rotate(0.1deg); }
+}
+
+/* Turbo boost effect */
+@keyframes turbo-boost {
+  0% {
+    transform: scaleX(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scaleX(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0.8;
+  }
+}
+
+/* Emails bouncing dramatically */
+@keyframes epic-email-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  15% { transform: translateY(-5px) rotate(-4deg) scale(1.05); }
+  30% { transform: translateY(2px) rotate(2deg) scale(0.98); }
+  45% { transform: translateY(-3px) rotate(-2deg) scale(1.02); }
+  60% { transform: translateY(1px) rotate(1deg) scale(0.99); }
+  75% { transform: translateY(-2px) rotate(-1deg) scale(1.01); }
+}
+
+/* Chrome shine sweep */
+@keyframes chrome-shine {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+/* Road heat shimmer */
+@keyframes heat-shimmer {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.02); }
+}
+
+/* Nitro flame */
+@keyframes nitro-flame {
+  0% {
+    transform: scaleX(0.8) scaleY(1);
+    opacity: 0.9;
+  }
+  25% {
+    transform: scaleX(1.2) scaleY(1.1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(0.9) scaleY(0.95);
+    opacity: 0.85;
+  }
+  75% {
+    transform: scaleX(1.1) scaleY(1.05);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scaleX(0.8) scaleY(1);
+    opacity: 0.9;
+  }
+}
+
+/* Utility classes for epic animations */
+.animate-flame {
+  animation: flame-flicker 0.15s ease-in-out infinite;
+}
+
+.animate-speed-streak {
+  animation: speed-streak 0.4s linear infinite;
+}
+
+.animate-dust-billow {
+  animation: dust-billow 0.8s ease-out infinite;
+}
+
+.animate-wheel-spark {
+  animation: wheel-spark 0.3s ease-out infinite;
+}
+
+.animate-headlight-pulse {
+  animation: headlight-pulse 1.5s ease-in-out infinite;
+}
+
+.animate-power-surge {
+  animation: power-surge 2s ease-in-out infinite;
+}
+
+.animate-epic-suspension {
+  animation: epic-suspension 0.6s ease-in-out infinite;
+}
+
+.animate-turbo-boost {
+  animation: turbo-boost 0.3s ease-in-out infinite;
+}
+
+.animate-epic-email-bounce {
+  animation: epic-email-bounce 0.5s ease-in-out infinite;
+}
+
+.animate-chrome-shine {
+  animation: chrome-shine 3s ease-in-out infinite;
+}
+
+.animate-nitro-flame {
+  animation: nitro-flame 0.1s ease-in-out infinite;
+}
+
+/* ===== SPAM TRASH PICKUP ANIMATIONS ===== */
+
+/* Trash can appears with bounce */
+@keyframes trashcan-appear {
+  0% {
+    transform: translateY(100px) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(10px) scale(0.95);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Trash can shake before pickup */
+@keyframes trashcan-shake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(5deg); }
+}
+
+/* Trash can flies into truck */
+@keyframes trashcan-pickup {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(20px) translateY(-60px) rotate(-20deg) scale(0.9);
+    opacity: 1;
+  }
+  60% {
+    transform: translateX(80px) translateY(-40px) rotate(-45deg) scale(0.7);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(120px) translateY(0) rotate(-90deg) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Mini truck drives in from right */
+@keyframes minitruck-enter {
+  0% {
+    transform: translateX(150px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mini truck drives away with cargo */
+@keyframes minitruck-exit {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-200px);
+    opacity: 0;
+  }
+}
+
+/* Claw/arm extends down */
+@keyframes claw-extend {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+/* Claw grabs */
+@keyframes claw-grab {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-30deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Trash items fly out of can */
+@keyframes trash-fly {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-80px) translateX(var(--fly-x, 30px)) rotate(var(--fly-rotate, 180deg));
+    opacity: 0;
+  }
+}
+
+/* Whole pickup scene animation */
+@keyframes pickup-scene {
+  0% { opacity: 0; transform: scale(0.8); }
+  10% { opacity: 1; transform: scale(1); }
+  90% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.9); }
+}
+
+/* Success sparkle burst */
+@keyframes sparkle-burst {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+/* Spam badge pulse */
+@keyframes spam-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Utility classes for trash pickup */
+.animate-trashcan-appear {
+  animation: trashcan-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-trashcan-shake {
+  animation: trashcan-shake 0.4s ease-in-out;
+}
+
+.animate-trashcan-pickup {
+  animation: trashcan-pickup 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-minitruck-enter {
+  animation: minitruck-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-minitruck-exit {
+  animation: minitruck-exit 0.5s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.animate-claw-extend {
+  animation: claw-extend 0.3s ease-out forwards;
+}
+
+.animate-claw-grab {
+  animation: claw-grab 0.2s ease-in-out;
+}
+
+.animate-trash-fly {
+  animation: trash-fly 0.5s ease-out forwards;
+}
+
+.animate-pickup-scene {
+  animation: pickup-scene 2.5s ease-in-out forwards;
+}
+
+.animate-sparkle-burst {
+  animation: sparkle-burst 0.6s ease-out forwards;
+}
+
+.animate-spam-pulse {
+  animation: spam-pulse 1s ease-in-out infinite;
+}
