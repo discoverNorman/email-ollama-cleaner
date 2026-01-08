@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import TitleBar from './lib/TitleBar.svelte';
+  import SimpleMode from './lib/SimpleMode.svelte';
   import {
     getHealth,
     getStats,
@@ -63,6 +64,9 @@
   let classificationFilter: string = $state('');
   let loadingEmails = $state(false);
   let refreshingData = $state(false);
+
+  // Simple mode for seniors/non-technical users
+  let simpleMode = $state(localStorage.getItem('simpleMode') !== 'false'); // Default to simple mode
 
   // Charts
   let pieChart: any = $state(null);
@@ -247,6 +251,12 @@
     }, 2500);
   }
 
+  // Toggle simple mode
+  function toggleSimpleMode() {
+    simpleMode = !simpleMode;
+    localStorage.setItem('simpleMode', String(simpleMode));
+  }
+
   onMount(async () => {
     await refreshData();
     await loadSettings();
@@ -267,6 +277,17 @@
     if (typeof window !== 'undefined' && (window as any).hideInitialLoader) {
       (window as any).hideInitialLoader();
     }
+
+    // Event listeners for Simple Mode
+    window.addEventListener('switch-to-emails', () => {
+      simpleMode = false;
+      activeTab = 'emails';
+    });
+
+    window.addEventListener('switch-to-settings', () => {
+      simpleMode = false;
+      activeTab = 'settings';
+    });
 
     // Check if classification job is already running (survives page refresh)
     const jobStatus = await getClassifyStatus();
@@ -1514,6 +1535,25 @@ ${JSON.stringify(result.parsed, null, 2)}`;
     </div>
   {/if}
 
+  <!-- Simple Mode / Advanced Mode Toggle -->
+  {#if simpleMode && eulaAccepted && !showSetupWizard}
+    <SimpleMode />
+
+    <!-- Toggle to Advanced Mode button -->
+    <button
+      onclick={toggleSimpleMode}
+      class="fixed bottom-8 right-8 px-6 py-3 bg-white border-2 border-gray-200 rounded-full shadow-lg hover:shadow-xl transition-all hover:border-emerald-500 flex items-center gap-2 text-gray-700 hover:text-emerald-600 font-medium z-50"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      <span>Advanced Mode</span>
+    </button>
+  {:else if eulaAccepted && !showSetupWizard}
+    <!-- Advanced Mode Content -->
 
   <!-- Header -->
   <header class="glass-strong sticky top-0 z-40">
@@ -3309,3 +3349,17 @@ ${JSON.stringify(result.parsed, null, 2)}`;
     </div>
   {/each}
 </div>
+
+  <!-- Toggle to Simple Mode button (Advanced Mode) -->
+  <button
+    onclick={toggleSimpleMode}
+    class="fixed bottom-8 right-8 px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 font-medium z-50 hover:from-emerald-600 hover:to-green-700"
+    title="Switch to Simple Mode for easier use"
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M8 12h8M12 8v8"/>
+    </svg>
+    <span>Simple Mode</span>
+  </button>
+  {/if}
